@@ -528,13 +528,37 @@ server.tool(
   }
 );
 
-// Add list-tags tool
+// Update list-tags tool with full parameters
 server.tool(
   "list-tags",
-  {},
-  async () => {
+  {
+    page: z.number().int().min(1).optional().default(1),
+    per_page: z.number().int().min(1).max(100).optional().default(100),
+    'q[title_or_description_cont]': z.string().optional(),
+    'q[handle_in]': z.array(z.string()).optional(),
+    'q[author_id_eq]': z.number().optional(),
+    'q[recipe_id_eq]': z.number().optional(),
+    'q[connection_id_eq]': z.number().optional(),
+    'q[only_assigned]': z.boolean().optional(),
+    'sort_by[]': z.array(z.enum(['title', 'assignment_count', 'updated_at', 'last_assigned_at'])).optional(),
+    'sort_direction[]': z.array(z.enum(['asc', 'desc'])).optional(),
+    'includes[]': z.array(z.enum(['assignment_count', 'author'])).optional()
+  },
+  async (params) => {
+    // Construct query parameters
+    const queryParams = new URLSearchParams();
+    Object.entries(params).forEach(([key, value]) => {
+      if (value !== undefined) {
+        if (Array.isArray(value)) {
+          value.forEach(v => queryParams.append(key, String(v)));
+        } else {
+          queryParams.append(key, String(value));
+        }
+      }
+    });
+
     // Make API call to Workato
-    const response = await fetch('https://www.workato.com/api/tags', {
+    const response = await fetch(`https://www.workato.com/api/tags?${queryParams.toString()}`, {
       headers: {
         'Authorization': 'Bearer ' + process.env.WORKATO_API_TOKEN
       }
@@ -543,6 +567,82 @@ server.tool(
     const data = await response.json();
     return {
       content: [{ type: "text", text: JSON.stringify(data, null, 2) }]
+    };
+  }
+);
+
+// Add create-tag tool
+server.tool(
+  "create-tag",
+  {
+    title: z.string().max(30),
+    description: z.string().max(150).optional(),
+    color: z.enum(['blue', 'violet', 'green', 'red', 'orange', 'gold', 'indigo', 'brown', 'teal', 'plum', 'slate', 'neutral']).optional()
+  },
+  async (params) => {
+    // Make API call to Workato
+    const response = await fetch('https://www.workato.com/api/tags', {
+      method: 'POST',
+      headers: {
+        'Authorization': 'Bearer ' + process.env.WORKATO_API_TOKEN,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(params)
+    });
+
+    const data = await response.json();
+    return {
+      content: [{ type: "text", text: JSON.stringify(data, null, 2) }]
+    };
+  }
+);
+
+// Add update-tag tool
+server.tool(
+  "update-tag",
+  {
+    handle: z.string(),
+    title: z.string().max(30),
+    description: z.string().max(150).optional(),
+    color: z.enum(['blue', 'violet', 'green', 'red', 'orange', 'gold', 'indigo', 'brown', 'teal', 'plum', 'slate', 'neutral']).optional()
+  },
+  async (params) => {
+    const { handle, ...updateParams } = params;
+    
+    // Make API call to Workato
+    const response = await fetch(`https://www.workato.com/api/tags/${handle}`, {
+      method: 'PUT',
+      headers: {
+        'Authorization': 'Bearer ' + process.env.WORKATO_API_TOKEN,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(updateParams)
+    });
+
+    const data = await response.json();
+    return {
+      content: [{ type: "text", text: JSON.stringify(data, null, 2) }]
+    };
+  }
+);
+
+// Add delete-tag tool
+server.tool(
+  "delete-tag",
+  {
+    handle: z.string()
+  },
+  async (params) => {
+    // Make API call to Workato
+    const response = await fetch(`https://www.workato.com/api/tags/${params.handle}`, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': 'Bearer ' + process.env.WORKATO_API_TOKEN
+      }
+    });
+
+    return {
+      content: [{ type: "text", text: "Tag deleted successfully" }]
     };
   }
 );

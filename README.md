@@ -23,11 +23,40 @@ Welcome to your Workato API integration toolkit, designed as a Model Context Pro
 - Handle project-level configurations
 
 🔖 Tag Management
-- Manage tag assignments
-- List and retrieve available tags in your workspace
+- Create, update, and delete tags in your workspace
+- List and retrieve available tags with advanced filtering options
 - Apply or remove tags from assets (recipes and connections)
 - Supports batch operations for multiple assets and tags
+- Filter tags by title, description, author, and usage
+- Sort tags by various criteria (title, usage count, etc.)
+- Customize tag appearance with color options
 
+Example tag operations:
+```json
+// Create a new tag
+{
+  "title": "HR",
+  "description": "HR department tag",
+  "color": "green"
+}
+
+// List tags with filters
+{
+  "includes[]": ["author", "assignment_count"],
+  "q[title_or_description_cont]": "hr",
+  "sort_by[]": ["assignment_count"],
+  "sort_direction[]": ["desc"]
+}
+
+// Manage tag assignments
+{
+  "add_tags": ["tag-ANgdXgTF-bANz3H"],
+  "recipe_ids": [54525313],
+  "connection_ids": [1571346]
+}
+```
+
+Note: Use the list-tags tool first to retrieve valid tag handles before managing tag assignments.
 
 🚀 Getting Started
 2. Installation
@@ -139,7 +168,10 @@ API Management:
 - list-api-endpoints: List all API endpoints with optional filtering by collection
 
 Tag Management:
-- list-tags: List all available tags in your workspace
+- list-tags: List and filter available tags in your workspace with advanced query options
+- create-tag: Create a new tag with custom title, description, and color
+- update-tag: Modify an existing tag's properties
+- delete-tag: Remove a tag from your workspace
 - manage-tags: Apply or remove tags from recipes and connections
 
 Job Management:
