@@ -22,6 +22,14 @@ Welcome to your Workato API integration toolkit, designed as a Model Context Pro
 - Organize recipes and connections
 - Handle project-level configurations
 
+📊 Activity Logs
+- Track all activities within your workspace
+- Filter logs by time range, users, and event types
+- Monitor resource changes and user actions
+- Support for multiple environments (dev, sandbox, prod, etc.)
+- Advanced filtering by resource and event types
+
+
 🔖 Tag Management
 - Create, update, and delete tags in your workspace
 - List and retrieve available tags with advanced filtering options
@@ -31,32 +39,6 @@ Welcome to your Workato API integration toolkit, designed as a Model Context Pro
 - Sort tags by various criteria (title, usage count, etc.)
 - Customize tag appearance with color options
 
-Example tag operations:
-```json
-// Create a new tag
-{
-  "title": "HR",
-  "description": "HR department tag",
-  "color": "green"
-}
-
-// List tags with filters
-{
-  "includes[]": ["author", "assignment_count"],
-  "q[title_or_description_cont]": "hr",
-  "sort_by[]": ["assignment_count"],
-  "sort_direction[]": ["desc"]
-}
-
-// Manage tag assignments
-{
-  "add_tags": ["tag-ANgdXgTF-bANz3H"],
-  "recipe_ids": [54525313],
-  "connection_ids": [1571346]
-}
-```
-
-Note: Use the list-tags tool first to retrieve valid tag handles before managing tag assignments.
 
 🚀 Getting Started
 2. Installation
@@ -166,6 +148,13 @@ Organization Tools:
 
 API Management:
 - list-api-endpoints: List all API endpoints with optional filtering by collection
+
+Activity Monitoring:
+- list-activity-logs: Retrieve detailed activity logs with advanced filtering options
+  - Filter by time range, users, and event types
+  - Include or exclude specific resource types
+  - Track changes across different environments
+  - Monitor user actions and system events
 
 Tag Management:
 - list-tags: List and filter available tags in your workspace with advanced query options

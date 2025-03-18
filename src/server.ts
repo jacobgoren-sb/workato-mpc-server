@@ -647,6 +647,47 @@ server.tool(
   }
 );
 
+// Add list-activity-logs tool
+server.tool(
+  "list-activity-logs",
+  {
+    'page[after]': z.number().int().optional(),
+    'page[size]': z.number().int().min(1).max(100).optional().default(100),
+    from: z.string().regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/).optional(),
+    to: z.string().regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/).optional(),
+    'users_ids[]': z.array(z.number()).optional(),
+    'include_resource_types[]': z.array(z.string()).optional(),
+    'exclude_resource_types[]': z.array(z.string()).optional(),
+    'include_event_types[]': z.array(z.string()).optional(),
+    'exclude_event_types[]': z.array(z.string()).optional()
+  },
+  async (params) => {
+    // Construct query parameters
+    const queryParams = new URLSearchParams();
+    Object.entries(params).forEach(([key, value]) => {
+      if (value !== undefined) {
+        if (Array.isArray(value)) {
+          value.forEach(v => queryParams.append(key, String(v)));
+        } else {
+          queryParams.append(key, String(value));
+        }
+      }
+    });
+
+    // Make API call to Workato
+    const response = await fetch(`https://www.workato.com/api/activity_logs?${queryParams.toString()}`, {
+      headers: {
+        'Authorization': 'Bearer ' + process.env.WORKATO_API_TOKEN
+      }
+    });
+
+    const data = await response.json();
+    return {
+      content: [{ type: "text", text: JSON.stringify(data, null, 2) }]
+    };
+  }
+);
+
 // Start receiving messages on stdin and sending messages on stdout
 const transport = new StdioServerTransport();
 await server.connect(transport); 
