@@ -153,27 +153,9 @@ Job Management:
 - get-job: Get detailed job information
 - resume-job: Resume a paused job
 
-📁 Project Structure
-```
-src/
-├── server.ts    # Main MCP server implementation
-└── README.md    # This documentation
-
-```
-🤝 Contributing Contributions welcome! Please feel free to submit a Pull Request.
-
-📝 License This project is licensed under the MIT License - see the LICENSE file for details.
-
-🐛 Issues & Support Found a bug or need help? Open an issue with:
-
-What you were trying to do
-What happened instead
-Steps to reproduce
-Your environment details
-
 📚 API Management
 
-List API Collections
+List API Collections:
 - List all API collections. The endpoint returns the project_id of the project to which the collections belong in the response.
 
 GET /api/api_collections
@@ -197,7 +179,7 @@ page	integer	Page number of the API collections to fetch. Defaults to 1.
     }
 ]
 
-List API Endpoints
+List API Endpoints:
 - Lists all API endpoints. Specify the api_collection_id to obtain the list of endpoints in a specific collection.
 
 GET /api/api_endpoints
@@ -233,5 +215,16 @@ curl  -X GET 'https://www.workato.com/api/api_endpoints?api_collection_id=1391' 
       "updated_at": "2020-08-05T05:59:55.991-07:00"
   }
 ]
+
+🤝 Contributing Contributions welcome! Please feel free to submit a Pull Request.
+
+📝 License This project is licensed under the MIT License - see the LICENSE file for details.
+
+🐛 Issues & Support Found a bug or need help? Open an issue with:
+
+What you were trying to do
+What happened instead
+Steps to reproduce
+Your environment details
 
 Made with ❤️ by Jacob Goren, for Workato automation
