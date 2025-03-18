@@ -23,15 +23,6 @@ Welcome to your Workato API integration toolkit, designed as a Model Context Pro
 - Handle project-level configurations
 
 🚀 Getting Started
-1. Environment Setup
-First, you'll need to set up your environment variables:
-
-```bash
-export WORKATO_API_TOKEN="your_token_here"
-```
-
-⚠️ Security Note: Never store API tokens directly in source code. Use environment variables or secure secret management solutions.
-
 2. Installation
 ```bash
 npm install
@@ -114,11 +105,6 @@ This method allows you to:
 - Share the same configuration across team members (excluding sensitive values)
 - Automatically load the server when opening the project in Cursor
 
-⚠️ Security Note: If including the config file in version control, make sure to:
-1. Never commit actual API tokens
-2. Use placeholder values or environment variable references
-3. Add sensitive values to your .gitignore file
-
 🛠️ Available Tools
 
 Recipe Management:
@@ -152,44 +138,18 @@ Job Management:
 src/
 ├── server.ts    # Main MCP server implementation
 └── README.md    # This documentation
+
 ```
+🤝 Contributing Contributions welcome! Please feel free to submit a Pull Request.
 
-Example Usage:
-```typescript
-// List all recipes in a folder
-{
-  "folder_id": "12345",
-  "per_page": 50
-}
+📝 License This project is licensed under the MIT License - see the LICENSE file for details.
 
-// Create a new connection
-{
-  "name": "My Salesforce Connection",
-  "provider": "salesforce",
-  "folder_id": "12345",
-  "input": {
-    "environment": "production",
-    "auth_type": "oauth2"
-  }
-}
+🐛 Issues & Support Found a bug or need help? Open an issue with:
 
-// Start a recipe
-{
-  "id": 67890
-}
-```
+What you were trying to do
+What happened instead
+Steps to reproduce
+Your environment details
 
-🤝 Contributing
-Contributions welcome! Please feel free to submit a Pull Request.
 
-📝 License
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-🐛 Issues & Support
-Found a bug or need help? Open an issue with:
-- What you were trying to do
-- What happened instead
-- Steps to reproduce
-- Your environment details
-
-Made with ❤️ by Jacob Goren, for Workato automation 
+Made with ❤️ by Jacob Goren, for Workato automation
