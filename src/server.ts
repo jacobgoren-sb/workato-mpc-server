@@ -470,6 +470,83 @@ server.tool(
   }
 );
 
+// Add list-api-endpoints tool
+server.tool(
+  "list-api-endpoints",
+  {
+    api_collection_id: z.string().optional(),
+    per_page: z.number().int().min(1).max(100).optional().default(100),
+    page: z.number().int().min(1).optional().default(1)
+  },
+  async (params) => {
+    // Construct query parameters
+    const queryParams = new URLSearchParams();
+    Object.entries(params).forEach(([key, value]) => {
+      if (value !== undefined) {
+        queryParams.append(key, String(value));
+      }
+    });
+
+    // Make API call to Workato
+    const response = await fetch(`https://www.workato.com/api/api_endpoints?${queryParams.toString()}`, {
+      headers: {
+        'Authorization': 'Bearer ' + process.env.WORKATO_API_TOKEN
+      }
+    });
+
+    const data = await response.json();
+    return {
+      content: [{ type: "text", text: JSON.stringify(data, null, 2) }]
+    };
+  }
+);
+
+// Add manage-tags tool
+server.tool(
+  "manage-tags",
+  {
+    add_tags: z.array(z.string()).optional(),
+    remove_tags: z.array(z.string()).optional(),
+    recipe_ids: z.array(z.number()).optional(),
+    connection_ids: z.array(z.number()).optional()
+  },
+  async (params) => {
+    // Make API call to Workato
+    const response = await fetch('https://www.workato.com/api/tags_assignments', {
+      method: 'POST',
+      headers: {
+        'Authorization': 'Bearer ' + process.env.WORKATO_API_TOKEN,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(params)
+    });
+
+    const data = await response.json();
+    return {
+      content: [{ type: "text", text: JSON.stringify(data, null, 2) }]
+    };
+  }
+);
+
+// Add list-tags tool
+server.tool(
+  "list-tags",
+  {},
+  async () => {
+    // Make API call to Workato
+    const response = await fetch('https://www.workato.com/api/tags', {
+      headers: {
+        'Authorization': 'Bearer ' + process.env.WORKATO_API_TOKEN
+      }
+    });
+
+    const data = await response.json();
+    return {
+      content: [{ type: "text", text: JSON.stringify(data, null, 2) }]
+    };
+  }
+);
+
 // Start receiving messages on stdin and sending messages on stdout
 const transport = new StdioServerTransport();
 await server.connect(transport); 
