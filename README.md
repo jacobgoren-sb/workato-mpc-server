@@ -1,5 +1,5 @@
 🤖 Workato MCP Server
-Welcome to your Workato API integration toolkit, designed as a Model Context Protocol (MCP) server for Cursor! This project provides seamless interaction with Workato's API through custom AI tools.
+Welcome to your Workato API integration toolkit, designed as a Model Context Protocol (MCP) server for Cursor or Claude! This project provides seamless interaction with Workato's API through custom AI tools.
 
 ✨ Features
 🔄 Recipe Management
@@ -21,6 +21,26 @@ Welcome to your Workato API integration toolkit, designed as a Model Context Pro
 - Create and manage folders
 - Organize recipes and connections
 - Handle project-level configurations
+
+🔖 Tag Management
+- Manage tag assignments
+- Applies or removes tags from assets in your workspace. Assets that can be tagged through this endpoint include recipes and connections. You can assign one or more tags to these assets or remove existing tags.
+
+POST /api/tags_assignments
+
+#Payload
+Name	Type	Description
+add_tags	array of strings	optional	An array of tag handles to be added. Each handle represents a tag to be applied to the specified assets.
+remove_tags	array of strings	optional	An array of tag handles to be removed. Each handle represents a tag to be removed from the specified assets.
+recipe_ids	array of integers	conditional	An array of recipe IDs to tag or untag. Required if connection_ids is not provided.
+connection_ids	array of integers	conditional	An array of connection IDs to tag or untag. Required if recipe_ids is not provided.
+
+RETRIEVE TAG HANDLES WITH THE LIST TAGS ENDPOINT
+
+Use the List tags (GET /api/tags) endpoint to retrieve the handles of the tags you plan to apply or remove.
+
+#Sample request
+This request adds the Accounting tag with the handle tag-ANgdXgTF-bANz3H to both a connection and a recipe in Workato.
 
 🚀 Getting Started
 2. Installation
@@ -151,5 +171,67 @@ What happened instead
 Steps to reproduce
 Your environment details
 
+📚 API Management
+
+List API Collections
+- List all API collections. The endpoint returns the project_id of the project to which the collections belong in the response.
+
+GET /api/api_collections
+
+#Query parameters
+Name	Type	Description
+per_page	integer	Number of API collections to return in a single page. Defaults to 100. Max is 100.
+page	integer	Page number of the API collections to fetch. Defaults to 1.
+
+#Response
+[
+    {
+        "id": 1361,
+        "name": "Quote to cash",
+        "version": "1.0",
+        "url": "https://api.peatql.io/quote-to-cash-v1",
+        "api_spec_url": "https://www.workato.com/doc/service/quote-to-cash-v1/swagger?token=4cab5bdf2cebbe2b4ahjkc9ac175f60c",
+        "created_at": "2020-06-15T22:20:15.327-07:00",
+        "updated_at": "2020-06-15T22:20:15.327-07:00",
+        "project_id": "523144"
+    }
+]
+
+List API Endpoints
+- Lists all API endpoints. Specify the api_collection_id to obtain the list of endpoints in a specific collection.
+
+GET /api/api_endpoints
+
+#Query parameters
+Name	Type	Description
+api_collection_id	string	ID of the API collection. If the parameter is not provided, all API endpoints are returned.
+per_page	integer	Number of API endpoints to return in a single page. Defaults to 100. Max is 100.
+page	integer	Page number of the API endpoints to fetch. Defaults to 1.
+
+#Sample request
+```bash
+curl  -X GET 'https://www.workato.com/api/api_endpoints?api_collection_id=1391' \
+      -H 'Authorization: Bearer <api_token>' \
+      -H 'Content-Type: application/json' \
+```
+
+#Response
+[
+  {
+      "id": 9903,
+      "api_collection_id": 1391,
+      "flow_id": 39999,
+      "name": "salesforce search",
+      "method": "GET",
+      "url": "https://api.na.workato.com/abstergoi/netsuite-customers-v1/salesforce/search",
+      "legacy_url": null,
+      "base_path": "/abstergoi/netsuite-customers-v1/salesforce/search",
+      "path": "salesforce/search",
+      "active": false,
+      "legacy": false,
+      "created_at": "2020-08-05T05:59:55.991-07:00",
+      "updated_at": "2020-08-05T05:59:55.991-07:00"
+  }
+]
 
 Made with ❤️ by Jacob Goren, for Workato automation
