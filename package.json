@@ -1,0 +1,29 @@
+{
+  "name": "workato-mpc-server",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "dist/server.js",
+  "scripts": {
+    "build": "yarn tsc",
+    "start": "node dist/server.js",
+    "dev": "yarn build && yarn start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jacobgoren-sb/workato-mpc-server.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jacobgoren-sb/workato-mpc-server/issues"
+  },
+  "homepage": "https://github.com/jacobgoren-sb/workato-mpc-server#readme",
+  "description": "",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.7.0",
+    "@types/node": "^20.11.24",
+    "typescript": "^5.3.3",
+    "zod": "^3.22.4"
+  }
+}
